@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ห้องทดลองอัตราส่วน สัดส่วน และร้อยละ | ม.1</title>
+<style>
+  :root{--navy:#17324d;--blue:#4c8ed9;--orange:#f39b45;--mint:#dff5eb;--paper:#f5f8fc;--ink:#233449;--purple:#8668c5}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Tahoma,"Noto Sans Thai",sans-serif;background:linear-gradient(135deg,#eef7ff,#f6f2ff);color:var(--ink);line-height:1.55}
+  header{background:linear-gradient(120deg,#17324d,#286b83);color:white;padding:26px 18px 22px;text-align:center}
+  header h1{margin:0;font-size:clamp(1.45rem,4vw,2.25rem)}
+  header p{margin:8px auto 0;max-width:760px;color:#e2f4ff}
+  main{max-width:1080px;margin:22px auto;padding:0 14px 35px}
+  .layout{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .card{background:white;border-radius:18px;padding:20px;box-shadow:0 8px 24px #1e416314;border:1px solid #e5edf5}
+  .card h2{font-size:1.2rem;margin:0 0 12px;color:var(--navy)}
+  .intro{margin-bottom:16px}
+  .control{margin:18px 0}
+  .control-head{display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:700}
+  output{background:#e9f3ff;color:#174e82;border-radius:10px;padding:4px 10px;min-width:66px;text-align:center}
+  input[type=range]{width:100%;accent-color:var(--blue);margin:12px 0 2px}
+  .hint{font-size:.9rem;color:#64748b;margin:0}
+  .ratio{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;background:#f3f8ff;border-radius:14px;padding:14px;margin-top:12px}
+  .ratio strong{font-size:1.4rem;color:#174e82}
+  .ratio .sep{color:#8295aa;font-weight:700}
+  .mix-stage{min-height:230px;display:flex;align-items:center;justify-content:center;gap:25px;background:linear-gradient(#f8fcff,#eef7ff);border-radius:16px;padding:18px;overflow:hidden}
+  .cup-wrap{text-align:center;min-width:90px}
+  .cup{height:135px;width:86px;border:4px solid #7895ad;border-top:0;border-radius:5px 5px 20px 20px;position:relative;margin:0 auto 8px;overflow:hidden;background:#ffffffaa}
+  .liquid{position:absolute;bottom:0;left:0;right:0;transition:height .45s ease,background .45s ease;border-radius:0 0 14px 14px}
+  .liquid.orange{background:linear-gradient(90deg,#ffb45c,#f28b2e)}
+  .liquid.blue{background:linear-gradient(90deg,#8ad6f2,#48a5d2)}
+  .mix-arrow{font-size:2rem;color:#8ba3b9;animation:bob 1.4s ease-in-out infinite}
+  .mix-cup{width:104px;height:155px;border-width:5px}
+  .mix-liquid{background:linear-gradient(90deg,#ffb35a,#e99a49,#f8c26e);transition:height .5s ease}
+  @keyframes bob{50%{transform:translateY(-5px)}}
+  .legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:12px;font-size:.92rem}
+  .dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px}
+  .bars{display:grid;gap:13px;margin-top:12px}
+  .bar-label{display:flex;justify-content:space-between;gap:8px;font-size:.93rem}
+  .track{height:22px;border-radius:99px;background:#edf2f7;overflow:hidden;margin-top:5px}
+  .fill{height:100%;width:0;transition:width .4s ease;border-radius:99px}
+  .fill.water{background:linear-gradient(90deg,#ffb45c,#f28b2e)}
+  .fill.soda{background:linear-gradient(90deg,#8ad6f2,#48a5d2)}
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+  .stat{background:#f7fafc;border-radius:12px;padding:10px;text-align:center}
+  .stat small{display:block;color:#64748b}
+  .stat strong{font-size:1.05rem;color:var(--navy)}
+  .full{grid-column:1/-1}
+  .task{border:1px solid #e5edf5;border-radius:14px;padding:14px;margin:12px 0;background:#fcfdff}
+  .task p{margin:0 0 9px;font-weight:700}
+  .task button{background:#e9f3ff;color:#174e82;border:0;border-radius:9px;padding:8px 12px;font-weight:700;cursor:pointer}
+  .answer{display:none;background:#effaf4;border-left:4px solid #42a879;padding:10px 12px;margin-top:10px;border-radius:7px}
+  .answer.show{display:block}
+  .note{background:#fff8e9;border-left:4px solid #f2b84b;border-radius:10px;padding:12px 14px;margin-top:14px}
+  .reset{border:0;border-radius:11px;background:var(--navy);color:white;padding:10px 15px;font-weight:700;cursor:pointer}
+  button:focus-visible,input:focus-visible{outline:3px solid #b7d9ff;outline-offset:3px}
+  footer{text-align:center;color:#66788a;font-size:.88rem;padding:0 14px 22px}
+  @media(max-width:760px){.layout{grid-template-columns:1fr}.full{grid-column:auto}.card{padding:16px}.mix-stage{gap:12px;padding:12px}.cup{width:70px;height:118px}.mix-cup{width:88px;height:140px}.stat-grid{grid-template-columns:1fr 1fr}.stat:last-child{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🧪 ห้องทดลองน้ำส้มโซดา</h1>
+  <p>สำรวจ “อัตราส่วน สัดส่วน และร้อยละ” ด้วยการปรับส่วนผสม แล้วสังเกตภาพและกราฟที่เปลี่ยนแปลงแบบเรียลไทม์</p>
+</header>
+<main>
+  <section class="card intro">
+    <h2>🎯 เป้าหมายการเรียนรู้</h2>
+    <p>นักเรียนสามารถอธิบายความหมายของอัตราส่วน และเขียนอัตราส่วนของปริมาณสองปริมาณหรือหลายปริมาณเพื่อเปรียบเทียบกันได้</p>
+    <p><strong>วิธีทดลอง:</strong> เลื่อนแถบปริมาณน้ำส้มและโซดา จากนั้นสังเกตอัตราส่วน ปริมาตรรวม กราฟแท่ง และระดับของเหลวในแก้วผสม</p>
+  </section>
+
+  <div class="layout">
+    <section class="card">
+      <h2>1. ปรับปริมาณส่วนผสม</h2>
+      <div class="control">
+        <div class="control-head"><label for="orange">🍊 ปริมาณน้ำส้ม</label><output id="orangeOut" for="orange">200 มล.</output></div>
+        <input id="orange" type="range" min="0" max="500" step="25" value="200" aria-label="ปริมาณน้ำส้ม หน่วยมิลลิลิตร">
+        <p class="hint">เลื่อนได้ตั้งแต่ 0 ถึง 500 มิลลิลิตร</p>
+      </div>
+      <div class="control">
+        <div class="control-head"><label for="soda">🫧 ปริมาณโซดา</label><output id="sodaOut" for="soda">300 มล.</output></div>
+        <input id="soda" type="range" min="0" max="500" step="25" value="300" aria-label="ปริมาณโซดา หน่วยมิลลิลิตร">
+        <p class="hint">เลื่อนได้ตั้งแต่ 0 ถึง 500 มิลลิลิตร</p>
+      </div>
+      <div class="ratio">
+        <span>น้ำส้ม : โซดา</span>
+        <strong id="rawRatio">200 : 300</strong>
+        <span class="sep">|</span><span>อย่างต่ำ</span><strong id="simpleRatio">2 : 3</strong>
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><small>ปริมาตรรวม</small><strong id="total">500 มล.</strong></div>
+        <div class="stat"><small>น้ำส้มในส่วนผสม</small><strong id="orangePct">40%</strong></div>
+        <div class="stat"><small>โซดาในส่วนผสม</small><strong id="sodaPct">60%</strong></div>
+      </div>
+      <div class="note" id="observation">สังเกต: น้ำส้ม 40% และโซดา 60% ของปริมาตรรวม</div>
+      <p style="margin:14px 0 0"><button class="reset" id="reset">คืนค่าเริ่มต้น</button></p>
+    </section>
+
+    <section class="card">
+      <h2>2. สังเกตการผสมแบบเคลื่อนไหว</h2>
+      <div class="mix-stage" aria-label="ภาพจำลองแก้วน้ำส้มและโซดาก่อนผสมและหลังผสม">
+        <div class="cup-wrap"><div class="cup"><div class="liquid orange" id="orangeLiquid" style="height:40%"></div></div><strong>น้ำส้ม</strong></div>
+        <div class="mix-arrow" aria-hidden="true">＋</div>
+        <div class="cup-wrap"><div class="cup"><div class="liquid blue" id="sodaLiquid" style="height:60%"></div></div><strong>โซดา</strong></div>
+        <div class="mix-arrow" aria-hidden="true">➜</div>
+        <div class="cup-wrap"><div class="cup mix-cup"><div class="liquid mix-liquid" id="mixLiquid" style="height:100%"></div></div><strong>เครื่องดื่มผสม</strong></div>
+      </div>
+      <div class="legend"><span><i class="dot" style="background:#f39b45"></i>น้ำส้ม</span><span><i class="dot" style="background:#55b6df"></i>โซดา</span><span><i class="dot" style="background:#e9a44e"></i>สีจำลองหลังผสม</span></div>
+      <p class="hint" style="margin-top:12px">ความสูงของของเหลวในแก้วส่วนผสมแต่ละชนิดเปลี่ยนตามปริมาณที่เลือก ส่วนแก้วผสมแสดงปริมาตรรวมในสเกลจำลอง</p>
+    </section>
+
+    <section class="card full">
+      <h2>3. วิเคราะห์กราฟแท่งสัดส่วนของส่วนผสม</h2>
+      <p class="hint">ความยาวแท่งแสดงสัดส่วนเมื่อเทียบกับปริมาตรรวม (100%)</p>
+      <div class="bars">
+        <div><div class="bar-label"><span>🍊 น้ำส้ม</span><strong id="barOrangeLabel">200 มล. · 40%</strong></div><div class="track"><div class="fill water" id="barOrange" style="width:40%"></div></div></div>
+        <div><div class="bar-label"><span>🫧 โซดา</span><strong id="barSodaLabel">300 มล. · 60%</strong></div><div class="track"><div class="fill soda" id="barSoda" style="width:60%"></div></div></div>
+      </div>
+      <p id="graphInsight" style="margin:14px 0 0">น้ำส้ม : โซดา = 2 : 3 หมายถึง น้ำส้ม 2 ส่วน ต่อโซดา 3 ส่วน</p>
+    </section>
+
+    <section class="card full">
+      <h2>4. คำถามท้ายกิจกรรม</h2>
+      <p class="hint">ลองตอบด้วยตนเองก่อน แล้วกด “ดูเฉลย” เพื่อตรวจสอบความเข้าใจ</p>
+      <div class="task">
+        <p>ข้อ 1: หากใช้น้ำส้ม 150 มล. และโซดา 250 มล. จงเขียนอัตราส่วนน้ำส้มต่อโซดาในรูปอย่างต่ำ</p>
+        <button type="button" class="answerBtn" aria-expanded="false">ดูเฉลย</button>
+        <div class="answer"><strong>เฉลย:</strong> 150 : 250 หารทั้งสองจำนวนด้วย 50 ได้ <strong>3 : 5</strong></div>
+      </div>
+      <div class="task">
+        <p>ข้อ 2: ถ้าใช้น้ำส้ม 200 มล. และโซดา 300 มล. น้ำส้มคิดเป็นร้อยละเท่าใดของเครื่องดื่มทั้งหมด?</p>
+        <button type="button" class="answerBtn" aria-expanded="false">ดูเฉลย</button>
+        <div class="answer"><strong>เฉลย:</strong> ปริมาตรรวม = 200 + 300 = 500 มล. น้ำส้มคิดเป็น (200 ÷ 500) × 100 = <strong>40%</strong></div>
+      </div>
+      <div class="task">
+        <p>ข้อ 3: สูตร A ใช้น้ำส้ม 2 ส่วนต่อโซดา 3 ส่วน และสูตร B ใช้น้ำส้ม 4 ส่วนต่อโซดา 6 ส่วน สูตรใดมีรสเข้มข้นกว่า หรือทั้งสองสูตรมีสัดส่วนเท่ากัน?</p>
+        <button type="button" class="answerBtn" aria-expanded="false">ดูเฉลย</button>
+        <div class="answer"><strong>เฉลย:</strong> ทั้งสองสูตรมีสัดส่วนเท่ากัน เพราะ 4 : 6 หารด้วย 2 ได้ 2 : 3 จึงเป็นอัตราส่วนที่เท่ากัน (สัดส่วนเดียวกัน)</div>
+      </div>
+    </section>
+  </div>
+</main>
+<footer>สื่อการเรียนรู้คณิตศาสตร์ ชั้นมัธยมศึกษาปีที่ 1 · อัตราส่วน สัดส่วน และร้อยละ</footer>
+<script>
+(function(){
+  const orange = document.getElementById('orange');
+  const soda = document.getElementById('soda');
+  const gcd = (a,b) => { while(b){ const t=b; b=a%b; a=t; } return a; };
+  const pct = (n,total) => total ? Math.round(n/total*100) : 0;
+  function update(){
+    const o = Number(orange.value), s = Number(soda.value), total = o+s;
+    const op = pct(o,total), sp = pct(s,total);
+    document.getElementById('orangeOut').textContent = o+' มล.';
+    document.getElementById('sodaOut').textContent = s+' มล.';
+    document.getElementById('rawRatio').textContent = o+' : '+s;
+    let simple;
+    if(o===0 && s===0) simple='กำหนดไม่ได้';
+    else if(o===0) simple='0 : 1';
+    else if(s===0) simple='1 : 0';
+    else { const d=gcd(o,s); simple=(o/d)+' : '+(s/d); }
+    document.getElementById('simpleRatio').textContent=simple;
+    document.getElementById('total').textContent=total+' มล.';
+    document.getElementById('orangePct').textContent=(total?op:0)+'%';
+    document.getElementById('sodaPct').textContent=(total?sp:0)+'%';
+    document.getElementById('barOrangeLabel').textContent=o+' มล. · '+(total?op:0)+'%';
+    document.getElementById('barSodaLabel').textContent=s+' มล. · '+(total?sp:0)+'%';
+    document.getElementById('barOrange').style.width=(total?op:0)+'%';
+    document.getElementById('barSoda').style.width=(total?sp:0)+'%';
+    // Individual cups use the same 500 mL visual scale.
+    document.getElementById('orangeLiquid').style.height=(o/500*100)+'%';
+    document.getElementById('sodaLiquid').style.height=(s/500*100)+'%';
+    document.getElementById('mixLiquid').style.height=(total/1000*100)+'%';
+    let obs;
+    if(total===0) obs='สังเกต: ยังไม่มีส่วนผสม จึงคำนวณร้อยละของแต่ละชนิดไม่ได้';
+    else if(o===0) obs='สังเกต: มีโซดาอย่างเดียว ไม่มีน้ำส้ม';
+    else if(s===0) obs='สังเกต: มีน้ำส้มอย่างเดียว ไม่มีโซดา';
+    else obs='สังเกต: น้ำส้ม '+op+'% และโซดา '+sp+'% ของปริมาตรรวม';
+    document.getElementById('observation').textContent=obs;
+    document.getElementById('graphInsight').textContent=total===0
+      ? 'เมื่อปริมาตรรวมเป็น 0 มล. จะยังเปรียบเทียบเป็นร้อยละไม่ได้'
+      : 'น้ำส้ม : โซดา = '+simple+' โดยน้ำส้มคิดเป็น '+op+'% และโซดาคิดเป็น '+sp+'% ของปริมาตรรวม';
+  }
+  orange.addEventListener('input',update);
+  soda.addEventListener('input',update);
+  document.getElementById('reset').addEventListener('click',()=>{orange.value=200;soda.value=300;update();});
+  document.querySelectorAll('.answerBtn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const panel=btn.nextElementSibling;
+      const open=panel.classList.toggle('show');
+      btn.textContent=open?'ซ่อนเฉลย':'ดูเฉลย';
+      btn.setAttribute('aria-expanded',String(open));
+    });
+  });
+  update();
+})();
+</script>
+</body>
+</html>
